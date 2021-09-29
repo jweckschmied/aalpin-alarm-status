@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUSTRIALPIN | Gebäudestatus</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="../static/update.js"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<body>
+    <h1>ALARM STATUS</h1>
+    <ul id="buildings">
+        {% for key, value in locations.items() %}
+        <li>
+            <h1>Location: {{key}}</h1>
+            <h2 id={{key}} style="color:{{value}};">Status: {{value}}</h2>
+        </li>
+        {% endfor %}
+    </ul>
+    <input type="button" id="submit" onclick="changeStatus()" name="changeStatus" value="Status Ändern"/>
+</body>
+
+</html>
