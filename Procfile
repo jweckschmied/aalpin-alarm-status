@@ -1,1 +1,1 @@
-web: gunicorn app:alarm
+web: gunicorn alarm:app
