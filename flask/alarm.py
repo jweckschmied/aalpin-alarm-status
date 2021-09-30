@@ -1,11 +1,19 @@
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, Response, redirect
 import json
 from announcer import StatusAnnouncer
 import os.path
 
 # Setup
 app = Flask(__name__)
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 announcer = StatusAnnouncer()
+
+LOCATION_NAMES = {
+    "office_north": "Büro Nord",
+    "office_south": "Büro Süd",
+    "warehouse_north": "Lager Nord",
+    "warehouse_south": "Lager Süd",
+}
 
 
 def init_status():
@@ -15,16 +23,19 @@ def init_status():
         "warehouse_north": "green",
         "warehouse_south": "green",
     }
-    if os.path.isfile("status.json"):
-        try:
-            with open("status.json") as json_file:
-                data = json.load(json_file)
-        except ValueError:
-            app.logger.error(
-                "ValueError: Failed to load status.json. No JSON object could be decoded"
-            )
-            return default
-    else:
+    try:
+        with open("status.json") as json_file:
+            data = json.load(json_file)
+            return data
+    except ValueError:
+        app.logger.warning(
+            "ValueError: No JSON object could be decoded. Using default values."
+        )
+        return default
+    except FileNotFoundError:
+        app.logger.info("status.json did not exist, created new one.")
+        with open("status.json", "w+") as f:
+            json.dump(default, f)
         return default
 
 
@@ -33,24 +44,42 @@ locations = init_status()
 
 @app.route("/")
 def index():
-    return render_template("index.html", locations=locations)
+    myloc = request.cookies.get("aalpin_loc")
+    if myloc in locations.keys():
+        return render_template(
+            "index.html", locations=locations, names=LOCATION_NAMES, myloc=myloc
+        )
+    else:
+        return redirect("/location")
+
+
+@app.route("/location")
+def location():
+    return render_template("locations.html", locations=locations, names=LOCATION_NAMES)
 
 
 @app.route("/update_status", methods=["POST"])
 def update_status():
     data = request.get_json()
-    if data["location"] in locations.keys() and data["status"] in ["red", "green"]:
+    if (
+        data["location"] in locations.keys()
+        and data["status"] in ["red", "green"]
+        and request.cookies.get("aalpin_loc") == data["location"]
+    ):
         if data["status"] == locations[data["location"]]:
             return "No changes.", 200
         else:
             locations[data["location"]] = data["status"]
             changed = {"location": data["location"], "status": data["status"]}
             announcer.announce(msg=json.dumps(changed))
-            with open("status.json", "w+") as f:
+            with open("status.json", "w") as f:
                 json.dump(locations, f)
             return "Status successfully updated!", 200
     else:
-        return "Bad request. Location or status type does not exist.", 400
+        return (
+            "Bad request. Location or status type does not exist, or you tried to change the status of a different location.",
+            400,
+        )
 
 
 @app.route("/stream")

@@ -3,4 +3,23 @@
 html {
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 14px;
-  }
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    margin: 0 0 0 1em;
+}
+  
+p { margin: 0.5em; }
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%; /* the magic */
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+}
+
+button { margin-top: 2em;}

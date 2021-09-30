@@ -10,18 +10,12 @@
     <script src="../static/update.js"></script>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
-
 <body>
-    <h1>BUILDING STATUS</h1>
-    <p class="mylocation">Mein Bereich: {{names[myloc]}}</p>
     {% for key, value in locations.items() %}
-    <div class="container">
-        <div class="circle" style="background-color:{{value}};" id={{key}}></div>
-        <p>{{names[key]}}</p>
-    </div>
-    {% endfor %}
-    <input type="button" id="change-red" onclick="changeStatus('red')" name="changeStatusRed" value="Status Ändern Rot"/>
-    <input type="button" id="change-green" onclick="changeStatus('green')" name="changeStatusGreen" value="Status Ändern Grün"/>
+        <div class="container">
+        <a href="/" onclick="setLocation('{{key}}')">{{names[key]}}</a>
+        </div>
+    {% endfor %}   
 </body>
 
 </html>
