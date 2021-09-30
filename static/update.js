@@ -35,10 +35,7 @@ function changeStatus(color) {
         body: JSON.stringify(params)
     };
     fetch('/update_status', options)
-        .then(response => response.json())
-        .then(response => {
-            // Do something with response.
-        });
+        .then(response => response.json());
 }
 
 function setLocation(location) {
