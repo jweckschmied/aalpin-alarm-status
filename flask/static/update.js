@@ -2,17 +2,22 @@ var eventSource = new EventSource("/stream");
 eventSource.onmessage = function (e) {
     console.log(e.data)
     var data = JSON.parse(e.data);
-    document.getElementById(data.location).style.color = data.status;
+    var element = document.getElementById(data.location);
+    element.style.color = data.status;
+    element.innerHTML = 'Status: ' + data.status
 };
 
 
-function changeStatus() {
+function changeStatus(color) {
     const params = {
-        location: "warehouse_north",
-        status: "red"
+        location: 'office_north',
+        status: color
     };
     const options = {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(params)
     };
     fetch('/update_status', options)

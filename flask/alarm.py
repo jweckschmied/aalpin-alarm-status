@@ -1,36 +1,34 @@
 from flask import Flask, render_template, request, Response
-from collections import UserDict
-import queue
 import json
+from announcer import StatusAnnouncer
+import os.path
 
+# Setup
 app = Flask(__name__)
-
-
-class StatusAnnouncer:
-    def __init__(self):
-        self.listeners = []
-
-    def listen(self):
-        q = queue.Queue(maxsize=5)
-        self.listeners.append(q)
-        return q
-
-    def announce(self, msg):
-        for i in reversed(range(len(self.listeners))):
-            try:
-                self.listeners[i].put_nowait(msg)
-            except queue.Full:
-                del self.listeners[i]
-
-
 announcer = StatusAnnouncer()
 
-locations = {
-    "office_north": "red",
-    "office_south": "green",
-    "warehouse_north": "red",
-    "warehouse_south": "red",
-}
+
+def init_status():
+    default = {
+        "office_north": "green",
+        "office_south": "green",
+        "warehouse_north": "green",
+        "warehouse_south": "green",
+    }
+    if os.path.isfile("status.json"):
+        try:
+            with open("status.json") as json_file:
+                data = json.load(json_file)
+        except ValueError:
+            app.logger.error(
+                "ValueError: Failed to load status.json. No JSON object could be decoded"
+            )
+            return default
+    else:
+        return default
+
+
+locations = init_status()
 
 
 @app.route("/")
@@ -48,6 +46,8 @@ def update_status():
             locations[data["location"]] = data["status"]
             changed = {"location": data["location"], "status": data["status"]}
             announcer.announce(msg=json.dumps(changed))
+            with open("status.json", "w+") as f:
+                json.dump(locations, f)
             return "Status successfully updated!", 200
     else:
         return "Bad request. Location or status type does not exist.", 400
