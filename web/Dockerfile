@@ -1,7 +1,5 @@
 FROM python:slim
 
-RUN python -m pip install --upgrade pip
-
 WORKDIR /usr/src/app
 
 COPY requirements.txt requirements.txt
