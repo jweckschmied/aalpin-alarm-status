@@ -13,6 +13,38 @@ function getLocation() {
     }
     return "";
 }
+var myStatus = "";
+
+const switchColors = {
+    red: "green",
+    green: "red",
+};
+
+async function getStatusAll() {
+    const response = await fetch('/get_status');
+    const status = await response.json();
+    return status;
+}
+function setButton() {
+    if (myStatus == "green") {
+        document.getElementById("change-status").value = "Abwesend";
+    }
+    else {
+        document.getElementById("change-status").value = "Anwesend";
+    }
+}
+
+function initStatus() {
+    getStatusAll().then(status => {
+        for (const [key, value] of Object.entries(status)) {
+            document.getElementById(key).style.backgroundColor = value;
+        };
+        myStatus = status[getLocation()];
+        setButton();
+    });
+}
+
+initStatus();
 
 var eventSource = new EventSource("/stream");
 eventSource.onmessage = function (e) {
@@ -20,12 +52,16 @@ eventSource.onmessage = function (e) {
     var data = JSON.parse(e.data);
     var element = document.getElementById(data.location);
     element.style.backgroundColor = data.status;
+    if (getLocation() == data.location) {
+        myStatus = data.status;
+        setButton();
+    };
 };
 
-function changeStatus(color) {
+function changeStatus() {
     const params = {
         location: getLocation(),
-        status: color
+        status: switchColors[myStatus]
     };
     const options = {
         method: 'POST',

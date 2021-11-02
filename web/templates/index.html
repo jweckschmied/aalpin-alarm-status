@@ -5,23 +5,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="20">
     <title>AUSTRIALPIN | Gebäudestatus</title>
-    <link rel="stylesheet" href="../static/style.css">
-    <script src="../static/update.js"></script>
+    <link rel="stylesheet" href="static/style.css">
+    <script src="static/update.js"></script>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
 <body>
     <h1>BUILDING STATUS</h1>
     <p class="mylocation">Mein Bereich: {{names[myloc]}}</p>
-    {% for key, value in locations.items() %}
     <div class="container">
-        <div class="circle" style="background-color:{{value}};" id={{key}}></div>
+        <div class="circle" style="background-color:{{locations[myloc]}};" id={{myloc}}></div>
+        <h1>{{names[myloc]}}</h>
+    </div>
+    <input type="button" ontouchstart="" class="btn-primary" id="change-status" onclick="changeStatus()"
+        name="changeStatus" value="Status Wechseln" />
+    <hr>
+    {% for key, value in locations.items() %}
+    {% if key != myloc %}
+    <div class="container">
+        <div class="circle" id="{{key}}"></div>
         <p>{{names[key]}}</p>
     </div>
+    {% endif %}
     {% endfor %}
-    <input type="button" id="change-red" onclick="changeStatus('red')" name="changeStatusRed" value="Status Ändern Rot"/>
-    <input type="button" id="change-green" onclick="changeStatus('green')" name="changeStatusGreen" value="Status Ändern Grün"/>
 </body>
 
 </html>

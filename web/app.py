@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response, redirect
+from flask import Flask, render_template, request, Response, redirect, jsonify
 import json
 from announcer import StatusAnnouncer
 import os.path
@@ -82,6 +82,11 @@ def update_status():
         )
 
 
+@app.route("/get_status", methods=["GET"])
+def get_status():
+    return jsonify(locations)
+
+
 @app.route("/stream")
 def stream():
     def eventStream():
@@ -90,4 +95,10 @@ def stream():
             msg = messages.get()
             yield "data: {}\n\n".format(msg)
 
-    return Response(eventStream(), mimetype="text/event-stream")
+    return Response(
+        eventStream(), mimetype="text/event-stream", headers={"X-Accel-Buffering": "no"}
+    )
+
+
+if __name__ == "__main__":
+    app.run()

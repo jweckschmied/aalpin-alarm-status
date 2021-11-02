@@ -12,7 +12,7 @@ html {
     margin: 0 0 0 1em;
 }
   
-p { margin: 0.5em; }
+p, h1 { margin: 0.5em; }
 
 .circle {
     width: 20px;
@@ -22,4 +22,16 @@ p { margin: 0.5em; }
     -webkit-border-radius: 50%;
 }
 
-button { margin-top: 2em;}
+.btn-primary { 
+    margin-top: 2em;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+    background-color: #3f6e8a; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}

@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build: ./web
+    expose:
+      - "8000"
+    ports:
+      - 5000:5000
+    volumes:
+      - web-data:/usr/src/app/static
+    env_file: 
+      - .env
+    command: flask run --host=0.0.0.0 --port=8000
+
+  nginx:
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - .:/www/static
+      - web-data:/usr/src/app/static
+    links:
+      - web:web
+
+volumes:
+  web-data:
