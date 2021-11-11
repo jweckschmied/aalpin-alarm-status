@@ -25,6 +25,15 @@ async function getStatusAll() {
     const status = await response.json();
     return status;
 }
+
+getStatusAll().then(status => {
+    for (const [key, value] of Object.entries(status)) {
+        document.getElementById(key).style.backgroundColor = value;
+    };
+    myStatus = status[getLocation()];
+    setButton()
+});
+
 function setButton() {
     if (myStatus == "green") {
         document.getElementById("change-status").value = "Abwesend";
@@ -34,18 +43,20 @@ function setButton() {
     }
 }
 
-function initStatus() {
+function updateStatus() {
     getStatusAll().then(status => {
         for (const [key, value] of Object.entries(status)) {
             document.getElementById(key).style.backgroundColor = value;
         };
         myStatus = status[getLocation()];
-        setButton();
+        setTimeout(updateStatus, 5000);
     });
 }
 
-initStatus();
+// initial call, or just call refresh directly
+setTimeout(updateStatus, 5000);
 
+/*
 var eventSource = new EventSource("/stream");
 eventSource.onmessage = function (e) {
     console.log(e.data)
@@ -57,6 +68,7 @@ eventSource.onmessage = function (e) {
         setButton();
     };
 };
+*/
 
 function changeStatus() {
     const params = {
@@ -72,6 +84,13 @@ function changeStatus() {
     };
     fetch('/update_status', options)
         .then(response => response.text());
+    getStatusAll().then(status => {
+        for (const [key, value] of Object.entries(status)) {
+            document.getElementById(key).style.backgroundColor = value;
+        };
+        myStatus = status[getLocation()];
+        setButton();
+    });
 }
 
 function setLocation(location) {

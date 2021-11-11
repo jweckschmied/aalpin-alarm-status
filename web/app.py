@@ -87,6 +87,7 @@ def get_status():
     return jsonify(locations)
 
 
+"""
 @app.route("/stream")
 def stream():
     def eventStream():
@@ -98,7 +99,7 @@ def stream():
     return Response(
         eventStream(), mimetype="text/event-stream", headers={"X-Accel-Buffering": "no"}
     )
-
+"""
 
 if __name__ == "__main__":
     app.run()

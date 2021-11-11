@@ -1,0 +1,20 @@
+[Unit]
+Description=alarm-status AALP Alarm Status
+Requires=docker.service network-online.target
+After=docker.service network-online.target
+
+[Service]
+WorkingDirectory=/home/vadmin/aalpin-alarm-status/
+Type=simple
+TimeoutStartSec=15min
+Restart=always
+User=vadmin
+
+ExecStart=/usr/local/bin/docker-compose up --remove-orphans
+
+ExecStop=/usr/local/bin/docker-compose down --remove-orphans
+
+ExecReload=/usr/local/bin/docker-compose --build
+
+[Install]
+WantedBy=multi-user.target
