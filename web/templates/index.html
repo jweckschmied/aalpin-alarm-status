@@ -13,23 +13,25 @@
 </head>
 
 <body>
-    <h1>BUILDING STATUS</h1>
-    <p class="mylocation">Mein Bereich: {{names[myloc]}}</p>
-    <div class="container">
-        <div class="circle" style="background-color:{{locations[myloc]}};" id={{myloc}}></div>
-        <h1>{{names[myloc]}}</h>
+    <div id="main">
+        <h1>BUILDING STATUS</h1>
+        <p class="mylocation">Mein Bereich: {{names[myloc]}}</p>
+        <div class="container">
+            <div class="circle" style="background-color:{{locations[myloc]}};" id={{myloc}}></div>
+            <h1>{{names[myloc]}}</h>
+        </div>
+        <input type="button" ontouchstart="" class="btn-primary" id="change-status" onclick="changeStatus()"
+            name="changeStatus" value="Status Wechseln" />
+        <hr>
+        {% for key, value in locations.items() %}
+        {% if key != myloc %}
+        <div class="container">
+            <div class="circle" id="{{key}}"></div>
+            <p>{{names[key]}}</p>
+        </div>
+        {% endif %}
+        {% endfor %}
     </div>
-    <input type="button" ontouchstart="" class="btn-primary" id="change-status" onclick="changeStatus()"
-        name="changeStatus" value="Status Wechseln" />
-    <hr>
-    {% for key, value in locations.items() %}
-    {% if key != myloc %}
-    <div class="container">
-        <div class="circle" id="{{key}}"></div>
-        <p>{{names[key]}}</p>
-    </div>
-    {% endif %}
-    {% endfor %}
 </body>
 
 </html>

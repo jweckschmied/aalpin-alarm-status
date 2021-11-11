@@ -12,11 +12,13 @@
 </head>
 
 <body>
-    {% for key, value in locations.items() %}
-    <div class="container">
-        <a href="/" onclick="setLocation('{{key}}')">{{names[key]}}</a>
+    <div id="main">
+        {% for key, value in locations.items() %}
+        <div class="container">
+            <a href="/" onclick="setLocation('{{key}}')">{{names[key]}}</a>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </body>
 
 </html>
