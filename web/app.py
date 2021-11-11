@@ -24,7 +24,7 @@ def init_status():
         "warehouse_south": "green",
     }
     try:
-        with open("status.json") as json_file:
+        with open("static/status.json") as json_file:
             data = json.load(json_file)
             return data
     except ValueError:

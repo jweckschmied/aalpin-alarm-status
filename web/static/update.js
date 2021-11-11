@@ -14,6 +14,7 @@ function getLocation() {
     return "";
 }
 var myStatus = "";
+var myLoc = getLocation();
 
 const switchColors = {
     red: "green",
@@ -26,14 +27,6 @@ async function getStatusAll() {
     return status;
 }
 
-getStatusAll().then(status => {
-    for (const [key, value] of Object.entries(status)) {
-        document.getElementById(key).style.backgroundColor = value;
-    };
-    myStatus = status[getLocation()];
-    setButton()
-});
-
 function setButton() {
     if (myStatus == "green") {
         document.getElementById("change-status").value = "Abwesend";
@@ -43,12 +36,21 @@ function setButton() {
     }
 }
 
+getStatusAll().then(status => {
+    for (const [key, value] of Object.entries(status)) {
+        document.getElementById(key).style.backgroundColor = value;
+    };
+    myStatus = status[myLoc];
+    setButton()
+});
+
 function updateStatus() {
     getStatusAll().then(status => {
         for (const [key, value] of Object.entries(status)) {
             document.getElementById(key).style.backgroundColor = value;
         };
-        myStatus = status[getLocation()];
+        myStatus = status[myLoc];
+        setButton();
         setTimeout(updateStatus, 5000);
     });
 }
