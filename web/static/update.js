@@ -34,6 +34,13 @@ function setButton() {
     else {
         document.getElementById("change-status").value = "Anwesend";
     }
+    getStatusAll().then(status => {
+        for (const [key, value] of Object.entries(status)) {
+            document.getElementById(key).style.backgroundColor = value;
+        };
+        myStatus = status[myLoc];
+        setButton()
+    });
 }
 
 getStatusAll().then(status => {
