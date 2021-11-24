@@ -60,12 +60,12 @@ function updateStatusPoll() {
         };
         myStatus = status[myLoc]["status"];
         setButton();
-        setTimeout(updateStatusPoll, 1000);
+        setTimeout(updateStatusPoll, 5000);
     });
 }
 
 // initial call, or just call refresh directly
-setTimeout(updateStatusPoll, 1000);
+updateStatusPoll();
 
 /*
 var eventSource = new EventSource("/stream");
@@ -99,6 +99,7 @@ function changeStatus() {
                 document.getElementById(myLoc).style.backgroundColor = json["status"];
                 var id = myLoc + "-ts"
                 document.getElementById(id).innerHTML = "seit: " + json["timestamp"];
+                myStatus = json["status"];
                 setButton()
             });
         });
