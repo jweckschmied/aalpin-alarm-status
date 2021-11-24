@@ -16,6 +16,7 @@ function getLocation() {
 var myStatus = "";
 var myLoc = getLocation();
 
+
 const switchColors = {
     red: "green",
     green: "red",
@@ -26,21 +27,6 @@ async function getStatusAll() {
     const status = await response.json();
     return status;
 }
-
-/*
-function updateStatusOnce() {
-    getStatusAll().then(status => {
-        for (const [key, value] of Object.entries(status)) {
-            document.getElementById(key).style.backgroundColor = value["status"];
-            var id = key + "-ts"
-            document.getElementById(id).innerHTML = value["timestamp"]
-        };
-        myStatus = status[myLoc]["status"];
-        setButton()
-    });
-}
-updateStatusOnce()
-*/
 
 function setButton() {
     if (myStatus == "green") {
@@ -66,20 +52,6 @@ function updateStatusPoll() {
 
 // initial call, or just call refresh directly
 updateStatusPoll();
-
-/*
-var eventSource = new EventSource("/stream");
-eventSource.onmessage = function (e) {
-    console.log(e.data)
-    var data = JSON.parse(e.data);
-    var element = document.getElementById(data.location);
-    element.style.backgroundColor = data.status;
-    if (getLocation() == data.location) {
-        myStatus = data.status;
-        setButton();
-    };
-};
-*/
 
 function changeStatus() {
     const params = {
