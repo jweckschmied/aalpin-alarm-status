@@ -55,16 +55,15 @@ function updateStatusPoll() {
             document.getElementById(key).style.backgroundColor = value["status"];
             var id = key + "-ts"
             document.getElementById(id).innerHTML = value["timestamp"];
-            console.log(document.getElementById(id).value)
         };
         myStatus = status[myLoc]["status"];
         setButton();
-        setTimeout(updateStatusPoll, 5000);
+        setTimeout(updateStatusPoll, 1000);
     });
 }
 
 // initial call, or just call refresh directly
-setTimeout(updateStatusPoll, 5000);
+setTimeout(updateStatusPoll, 1000);
 
 /*
 var eventSource = new EventSource("/stream");
@@ -93,8 +92,14 @@ function changeStatus() {
         body: JSON.stringify(params)
     };
     fetch('/update_status', options)
-        .then(response => response.text());
-    updateStatusOnce()
+        .then(response => {
+            response.json().then(json => {
+                document.getElementById(myLoc).style.backgroundColor = json["status"];
+                var id = myLoc + "-ts"
+                document.getElementById(id).innerHTML = json["timestamp"];
+            });
+        });
+    setButton()
 }
 
 function setLocation(location) {

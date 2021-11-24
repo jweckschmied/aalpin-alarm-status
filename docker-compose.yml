@@ -5,14 +5,14 @@ services:
     restart: always
     build: ./web
     expose:
-      - "8000"
+      - "5000"
     ports:
       - 5000:5000
     volumes:
       - web-data:/usr/src/app/static
     env_file: 
       - .env
-    command: flask run --host=0.0.0.0 --port=8000
+    command: uwsgi --socket 0.0.0.0:5000 --protocol=http -w app:app
 
   nginx:
     restart: always

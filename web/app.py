@@ -75,7 +75,7 @@ def update_status():
             }
             with open("status.json", "w") as f:
                 json.dump(locations, f)
-            return "Status successfully updated!", 200
+            return jsonify(locations[data["location"]])
     else:
         return (
             "Bad request. Location or status type does not exist, or you tried to change the status of a different location.",
