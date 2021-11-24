@@ -27,6 +27,19 @@ async function getStatusAll() {
     return status;
 }
 
+function updateStatusOnce() {
+    getStatusAll().then(status => {
+        for (const [key, value] of Object.entries(status)) {
+            document.getElementById(key).style.backgroundColor = value["status"];
+            var id = key + "-ts"
+            document.getElementById(id).innerHTML = value["timestamp"]
+        };
+        myStatus = status[myLoc]["status"];
+        setButton()
+    });
+}
+updateStatusOnce()
+
 function setButton() {
     if (myStatus == "green") {
         document.getElementById("change-status").value = "Abwesend";
@@ -34,36 +47,24 @@ function setButton() {
     else {
         document.getElementById("change-status").value = "Anwesend";
     }
-    getStatusAll().then(status => {
-        for (const [key, value] of Object.entries(status)) {
-            document.getElementById(key).style.backgroundColor = value;
-        };
-        myStatus = status[myLoc];
-        setButton()
-    });
 }
 
-getStatusAll().then(status => {
-    for (const [key, value] of Object.entries(status)) {
-        document.getElementById(key).style.backgroundColor = value;
-    };
-    myStatus = status[myLoc];
-    setButton()
-});
-
-function updateStatus() {
+function updateStatusPoll() {
     getStatusAll().then(status => {
         for (const [key, value] of Object.entries(status)) {
-            document.getElementById(key).style.backgroundColor = value;
+            document.getElementById(key).style.backgroundColor = value["status"];
+            var id = key + "-ts"
+            document.getElementById(id).innerHTML = value["timestamp"];
+            console.log(document.getElementById(id).value)
         };
-        myStatus = status[myLoc];
+        myStatus = status[myLoc]["status"];
         setButton();
-        setTimeout(updateStatus, 5000);
+        setTimeout(updateStatusPoll, 5000);
     });
 }
 
 // initial call, or just call refresh directly
-setTimeout(updateStatus, 5000);
+setTimeout(updateStatusPoll, 5000);
 
 /*
 var eventSource = new EventSource("/stream");
@@ -93,13 +94,7 @@ function changeStatus() {
     };
     fetch('/update_status', options)
         .then(response => response.text());
-    getStatusAll().then(status => {
-        for (const [key, value] of Object.entries(status)) {
-            document.getElementById(key).style.backgroundColor = value;
-        };
-        myStatus = status[getLocation()];
-        setButton();
-    });
+    updateStatusOnce()
 }
 
 function setLocation(location) {
@@ -107,5 +102,4 @@ function setLocation(location) {
     d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toUTCString();
     document.cookie = "aalpin_loc=" + location + ";" + expires + ";path=/";
-    console.log("Cookie set")
 }

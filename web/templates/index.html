@@ -17,8 +17,9 @@
         <h1>BUILDING STATUS</h1>
         <p class="mylocation">Mein Bereich: {{names[myloc]}}</p>
         <div class="container">
-            <div class="circle" style="background-color:{{locations[myloc]}};" id={{myloc}}></div>
+            <div class="circle" style="background-color:{{locations[myloc]["status"]}};" id="{{myloc}}"></div>
             <h1>{{names[myloc]}}</h>
+            <p class="timestamp" id="{{myloc}}-ts">seit: {{locations[myloc]["timestamp"]}}</p>
         </div>
         <input type="button" ontouchstart="" class="btn-primary" id="change-status" onclick="changeStatus()"
             name="changeStatus" value="Status Wechseln" />
@@ -27,7 +28,8 @@
         {% if key != myloc %}
         <div class="container">
             <div class="circle" id="{{key}}"></div>
-            <p>{{names[key]}}</p>
+            <p class="location-name">{{names[key]}}</p>
+            <p class="timestamp" id="{{key}}-ts">seit: {{value["timestamp"]}}</p>
         </div>
         {% endif %}
         {% endfor %}
