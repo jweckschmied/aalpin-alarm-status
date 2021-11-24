@@ -27,6 +27,7 @@ async function getStatusAll() {
     return status;
 }
 
+/*
 function updateStatusOnce() {
     getStatusAll().then(status => {
         for (const [key, value] of Object.entries(status)) {
@@ -39,6 +40,7 @@ function updateStatusOnce() {
     });
 }
 updateStatusOnce()
+*/
 
 function setButton() {
     if (myStatus == "green") {
@@ -54,7 +56,7 @@ function updateStatusPoll() {
         for (const [key, value] of Object.entries(status)) {
             document.getElementById(key).style.backgroundColor = value["status"];
             var id = key + "-ts"
-            document.getElementById(id).innerHTML = value["timestamp"];
+            document.getElementById(id).innerHTML = "seit: " + value["timestamp"];
         };
         myStatus = status[myLoc]["status"];
         setButton();
@@ -96,7 +98,7 @@ function changeStatus() {
             response.json().then(json => {
                 document.getElementById(myLoc).style.backgroundColor = json["status"];
                 var id = myLoc + "-ts"
-                document.getElementById(id).innerHTML = json["timestamp"];
+                document.getElementById(id).innerHTML = "seit: " + json["timestamp"];
             });
         });
     setButton()
