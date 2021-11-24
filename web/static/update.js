@@ -99,9 +99,9 @@ function changeStatus() {
                 document.getElementById(myLoc).style.backgroundColor = json["status"];
                 var id = myLoc + "-ts"
                 document.getElementById(id).innerHTML = "seit: " + json["timestamp"];
+                setButton()
             });
         });
-    setButton()
 }
 
 function setLocation(location) {
